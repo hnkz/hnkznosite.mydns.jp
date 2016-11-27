@@ -6,8 +6,6 @@ var time = hours + ":" + minutes + ":" + seconds;
 
 var dir = "";
 
-var name = "hanakazu ";
-
 var commandList = {
 	"ls"			:"List information about the FILEs (the current directory by default)",
  	"cd"			:"usage: cd [dir] Change directory",
@@ -42,7 +40,7 @@ var lsRoot = ["home", "work", "git","link"];
 var navList = ["home", "work", "git", "link"];
 
 
-var msg = "<h1>Welcome to hnkznosite.mydns.jp<h1><p>Please \"help\" command if you have anything you do not understand.</p>"+ name + time + " <span class=\"dir\">/" + dir +  "</span> $ ";
+var msg = "<h1>Welcome to hnkznosite.mydns.jp<h1><p>Please \"help\" command if you have anything you do not understand.</p>"+ name + " " + time + " <span class=\"dir\">/" + dir +  "</span> $ ";
 
 var tagFlag = false;
 
@@ -102,7 +100,7 @@ document.onkeydown = function(e) {
 				cat(file);
 			}
 			 else {
-				msg = msg + command + "<br>" + "-hnkz: " + command + ": command not found" + "<br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+				msg = msg + command + "<br>" + "-hnkz: " + command + ": command not found" + "<br>" + name + " " + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 			}
 
 			command = "";
@@ -158,19 +156,19 @@ function cd(){
 		}
 
 		if (flag) {
-			msg = msg + command + "<br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+			msg = msg + command + "<br>" + name + " " + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 		} else {
-			msg = msg + command + "<br><span class=\"discription\">-hnkz: cd: No such file or directory</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+			msg = msg + command + "<br><span class=\"discription\">-hnkz: cd: No such file or directory</span><br>" + name + " " + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 		}
 	} else {
 		if (command == "cd ..") {
 			dir = "";
-			msg = msg + command + "<br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+			msg = msg + command + "<br>" + name + " " + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 		} else if (command == "cd " || command == "cd") {
 			dir = "";
-			msg = msg + command + "<br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+			msg = msg + command + "<br>" + name + " " + time + " <span class=\"dir\">/" + dir + "</span> $ ";
  		} else {
-			msg = msg + command + "<br><span class=\"discription\">-hnkz: cd: No such file or directory</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+			msg = msg + command + "<br><span class=\"discription\">-hnkz: cd: No such file or directory</span><br>" + name + " " + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 		}
 	}
 }
@@ -180,14 +178,14 @@ function ls() {
 
 	if (dir == "") {
 		lsList = "<span class=\"nav\">" + lsRoot[0] + " " + lsRoot[1] + " " + lsRoot[2] + " " + lsRoot[3] + "</span>";
-		msg = msg + command + "<br>" + lsList + "<br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+		msg = msg + command + "<br>" + lsList + "<br>" + name + " " + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 	} else if (dir == "home") {
 		lsList = "<span class=\"nav\">";
 		for (key in homeFile) {
 			lsList += key + " ";
 		}
 		lsList += "</span>";
-		msg = msg + command + "<br>" + lsList + "<br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+		msg = msg + command + "<br>" + lsList + "<br>" + name + " " + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 
 	} else if (dir == "work") {
 		lsList = "<span class=\"nav\">";
@@ -195,7 +193,7 @@ function ls() {
 			lsList += key + " ";
 		}
 		lsList += "</span>";
-		msg = msg + command + "<br>" + lsList + "<br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+		msg = msg + command + "<br>" + lsList + "<br>" + name + " " + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 
 	} else if (dir == "git") {
 		lsList = "<span class=\"nav\">";
@@ -203,7 +201,7 @@ function ls() {
 			lsList += key + " ";
 		}
 		lsList += "</span>";
-		msg = msg + command + "<br>" + lsList + "<br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+		msg = msg + command + "<br>" + lsList + "<br>" + name + " " + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 
 	} else if (dir == "link") {
 		lsList = "<span class=\"nav\">";
@@ -211,19 +209,19 @@ function ls() {
 			lsList += key + " ";
 		}
 		lsList += "</span>";
-		msg = msg + command + "<br>" + lsList + "<br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+		msg = msg + command + "<br>" + lsList + "<br>" + name + " " + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 
 	} else {
-		msg = msg + command + "<br><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+		msg = msg + command + "<br><br>" + name + " " + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 	}
 }
 
 function clear() {
-	msg = "<h1>Welcome to hnkznosite.mydns.jp<h1><p>Please \"help\" command if you have anything you do not understand.</p>"+ name + time + " <span class=\"dir\">/" + dir +  "</span> $ ";
+	msg = "<h1>Welcome to hnkznosite.mydns.jp<h1><p>Please \"help\" command if you have anything you do not understand.</p>"+ name + " " + time + " <span class=\"dir\">/" + dir +  "</span> $ ";
 }
 
 function pwd() {
-	msg = msg + command + "<br>" + "<span class=\"dir\">/" + dir + "</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+	msg = msg + command + "<br>" + "<span class=\"dir\">/" + dir + "</span><br>" + name + " " + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 }
 
 function help() {
@@ -233,51 +231,51 @@ function help() {
 	}
 	help += "</span>";
 
-	msg = msg + command + "<br>" + help + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+	msg = msg + command + "<br>" + help + name + " " + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 }
 
 function cat(file) {
 	if (file == "") {
-		msg = msg + command + "<br><span class=\"discription\">-hnkz: cat: No such file or directory</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+		msg = msg + command + "<br><span class=\"discription\">-hnkz: cat: No such file or directory</span><br>" + name + " " + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 	} else {
 		if (dir == "home") {
 			for (key in homeFile) {
 				if (file == key) {
-					msg = msg + command + "<br><span class=\"discription\">" + homeFile[key] + "</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+					msg = msg + command + "<br><span class=\"discription\">" + homeFile[key] + "</span><br>" + name + " " + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 					return;
 				}
 			}
-			msg = msg + command + "<br><span class=\"discription\">-hnkz: cat: No such file or directory</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+			msg = msg + command + "<br><span class=\"discription\">-hnkz: cat: No such file or directory</span><br>" + name + " " + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 
 		} else if (dir == "work") {
 			for (key in workFile) {
 				if (file == key) {
-					msg = msg + command + "<br><span class=\"discription\">" + workFile[key] + "</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+					msg = msg + command + "<br><span class=\"discription\">" + workFile[key] + "</span><br>" + name + " " + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 					return;
 				}
 			}
-			msg = msg + command + "<br><span class=\"discription\">-hnkz: cat: No such file or directory</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+			msg = msg + command + "<br><span class=\"discription\">-hnkz: cat: No such file or directory</span><br>" + name + " " + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 
 		} else if (dir == "git") {
 			for (key in gitFile) {
 				if (file == key) {
-					msg = msg + command + "<br><span class=\"discription\">" + gitFile[key] + "</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+					msg = msg + command + "<br><span class=\"discription\">" + gitFile[key] + "</span><br>" + name + " " + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 					return;
 				}
 			}
-			msg = msg + command + "<br><span class=\"discription\">-hnkz: cat: No such file or directory</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+			msg = msg + command + "<br><span class=\"discription\">-hnkz: cat: No such file or directory</span><br>" + name + " " + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 
 		} else if (dir == "link") {
 			for (key in linkFile) {
 				if (file == key) {
-					msg = msg + command + "<br><span class=\"discription\">" + linkFile[key] + "</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+					msg = msg + command + "<br><span class=\"discription\">" + linkFile[key] + "</span><br>" + name + " " + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 					return;
 				}
 			}
-			msg = msg + command + "<br><span class=\"discription\">-hnkz: cat: No such file or directory</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+			msg = msg + command + "<br><span class=\"discription\">-hnkz: cat: No such file or directory</span><br>" + name + " " + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 
 		} else {
-			msg = msg + command + "<br><span class=\"discription\">-hnkz: cat: No such file or directory</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+			msg = msg + command + "<br><span class=\"discription\">-hnkz: cat: No such file or directory</span><br>" + name + " " + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 		}
 	}
 }
