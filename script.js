@@ -1,36 +1,45 @@
-//時間の取得の初期化
+// 時間の取得の初期化
 dd = new Date();
 hours = dd.getHours();
 minutes = dd.getMinutes();
 seconds = dd.getSeconds();
 var time = hours + ":" + minutes + ":" + seconds;
 
-//ディレクトリの初期化
+// ディレクトリの初期化
 var dir = "";
 
-//ユーザ名の初期化
+// ユーザ名の初期化
 var name = "hanakazu ";
 
-//コマンドの初期化
+// コマンドリストの初期化
+var commandList = {	"ls":"List information about the FILEs (the current directory by default).",
+									 	"cd":"usage: cd [dir] change directory",
+									 	"clear":"clear the terminal",
+										"pwd":"show the current directory",
+										"file":"usage: file [file] show the file information",
+										"help":"show command usage"
+									};
+
+// コマンドの初期化
 var command = "";
 
-//home時のlsコマンドを初期化
-var ls_home = ["<span class=\"nav\">home</span>", "<span class=\"nav\">work</span>", "<span class=\"nav\">git</span>","<span class=\"nav\">link</span>"];
+// home時のlsコマンドを初期化
+var lsHome = ["<span class=\"nav\">home</span>", "<span class=\"nav\">work</span>", "<span class=\"nav\">git</span>","<span class=\"nav\">link</span>"];
 
-//navのリストを初期化
+// navのリストを初期化
 var navList = ["home", "work", "git", "link"];
 
 
-//表示するメッセージの初期化
-var msg = "<h1>Welcome to hnkznosite.mydns.jp<h1>"+ name + time + " <span class=\"dir\">/" + dir +  "</span> $ ";
+// 表示するメッセージの初期化
+var msg = "<h1>Welcome to hnkznosite.mydns.jp<h1><p>Please \"help\" command if you have anything you do not understand.</p>"+ name + time + " <span class=\"dir\">/" + dir +  "</span> $ ";
 
-//tag感知フラグ
+// tag感知フラグ
 var tagFlag = false;
 
-//文字数カウンタ
+// 文字数カウンタ
 var count = 0;
 
-//最初の表示
+// 最初の表示
 function disp(){
 	var type = msg.substring(0, count);
   var lastType = type.slice(-1);
@@ -41,58 +50,45 @@ function disp(){
 	if(!tagFlag){
   	document.getElementById("all").innerHTML = type;
   	count ++;
+		var rep = setTimeout("disp()", 15);
   } else {
     count ++;
+		var rep = setTimeout("disp()", 0);
   }
 
-	var rep = setTimeout("disp()", 15);
 
 	if(count > msg.length){
 		clearTimeout(rep);
 	}
 }
 
-//ユーザがキーを入力したとき
+// ユーザがキーを入力したとき
 document.onkeydown = function(e) {
 
-	//時間の取得
+	// 時間の取得
 	dd = new Date();
 	hours = dd.getHours();
 	minutes = dd.getMinutes();
 	seconds = dd.getSeconds();
-	var time = hours + ":" + minutes + ":" + seconds;
+
+	time = hours + ":" + minutes + ":" + seconds;
 
 	if (event.keyCode == 13) {
 		if (command == "") {
 			document.getElementById("all").innerHTML = msg;
 		} else {
-			if (command.match(/cd/)) {
-				if (dir == "") {
-					for(var i = 0; i < navList.length; i++){
-						reg = new RegExp(navList[i]);
-						if(command.match(reg)){
-							dir = navList[i];
-						}
-					}
-					msg = msg + command + "<br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
-				} else {
-					if (command.match("..")) {
-						dir = "";
-						msg = msg + command + "<br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
-					} else {
-						msg = msg + "<br>-hnkz: cd: No such file or directory<br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
-					}
-				}
+			if (command.match(/cd [a-z.0-9]*/) || command == "cd") {
+				cd();
 			} else if ( command == "ls") {
-				if(dir == ""){
-					var lsList = ls_home[0] + " " + ls_home[1] + " " + ls_home[2] + " " + ls_home[3];
-					msg = msg + command + "<br>" + lsList + "<br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
-				} else {
-					msg = msg + command + "<br><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
-				}
+				ls();
 			} else if ( command == "clear") {
-				msg = "<h1>Welcome to hnkznosite.mydns.jp<h1>"+ name + time + " <span class=\"dir\">/" + dir +  "</span> $ "
-			} else {
+				clear();
+			} else if ( command == "pwd") {
+				pwd();
+			} else if ( command == "help") {
+				help();
+			}
+			 else {
 				msg = msg + command + "<br>" + "-hnkz: " + command + ": command not found" + "<br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 			}
 
@@ -115,7 +111,71 @@ document.onkeydown = function(e) {
 	}
   else{
 		command = command + String.fromCharCode(event.keyCode).toLowerCase();
-		//command = command + event.keyCode;
+		// command = command + event.keyCode;
 		document.getElementById("all").innerHTML = msg + command;
 	}
 };
+
+// cd command
+function cd(){
+	var flag = false;
+
+	if (dir == "") {
+		for(var i = 0; i < navList.length; i++){
+			reg = new RegExp(navList[i]);
+			if(command.match(reg)){
+				dir = navList[i];
+				flag = true;
+			}
+		}
+		if (command == "cd" || command == "cd ") {
+			flag = true;
+		} else if (command == "cd ..") {
+			flag = true;
+		}
+
+		if (flag) {
+			msg = msg + command + "<br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+		} else {
+			msg = msg + command + "<br><span class=\"discription\">-hnkz: cd: No such file or directory</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+		}
+	} else {
+		if (command == "cd ..") {
+			dir = "";
+			msg = msg + command + "<br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+		} else {
+			msg = msg + command + "<br><span class=\"discription\">-hnkz: cd: No such file or directory</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+		}
+	}
+}
+
+// ls command
+function ls(){
+	if(dir == ""){
+		var lsList = lsHome[0] + " " + lsHome[1] + " " + lsHome[2] + " " + lsHome[3];
+		msg = msg + command + "<br>" + lsList + "<br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+	} else {
+		msg = msg + command + "<br><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+	}
+}
+
+// clear command
+function clear(){
+	msg = "<h1>Welcome to hnkznosite.mydns.jp<h1><p>Please \"help\" command if you have anything you do not understand.</p>"+ name + time + " <span class=\"dir\">/" + dir +  "</span> $ ";
+}
+
+// pwd command
+function pwd(){
+	msg = msg + command + "<br>" + "<span class=\"dir\">/" + dir + "</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+}
+
+// help command
+function help(){
+	var help = "<br><span class=\"discription\">";
+	for(key in commandList){
+		help += key + ":<br>&nbsp;&nbsp;&nbsp;&nbsp;" + commandList[key] + "<br>";
+	}
+	help += "</span>";
+
+	msg = msg + command + "<br>" + help + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+}
