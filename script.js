@@ -1,45 +1,51 @@
-// 時間の取得の初期化
 dd = new Date();
 hours = dd.getHours();
 minutes = dd.getMinutes();
 seconds = dd.getSeconds();
 var time = hours + ":" + minutes + ":" + seconds;
 
-// ディレクトリの初期化
 var dir = "";
 
-// ユーザ名の初期化
 var name = "hanakazu ";
 
-// コマンドリストの初期化
-var commandList = {	"ls":"List information about the FILEs (the current directory by default).",
-									 	"cd":"usage: cd [dir] change directory",
-									 	"clear":"clear the terminal",
-										"pwd":"show the current directory",
-										"file":"usage: file [file] show the file information",
-										"help":"show command usage"
-									};
+var commandList = {	"ls":"List information about the FILEs (the current directory by default)",
+									 	"cd":"usage: cd [dir] Change directory",
+									 	"clear":"Clear the terminal",
+										"pwd":"Show the current directory",
+										"file":"usage: file [file] Show the file information",
+										"help":"Show command usage",
+										"cat":"usage: cat [file] Show file contents "
+};
 
-// コマンドの初期化
+var homeFile = {
+	"self_introduction.txt":"Hi, Im Kazuki Hanai. Im 18 years old.<br> Im attending Shizuoka University.<br><br> Like: Computer, Science, Math, Outdoor-sports etc...<br>My Dream: I want to be Hacker or Researcher <br><br> KazukiHanai"
+};
+
+var workFile = {
+	"my_past_work.txt":"In preparation..."
+};
+
+var gitFile = {
+	"git.link":"<a href=\"https://github.com/hnkz\" target=\"_blank\">hnkz's git link</a>"
+};
+
+var linkFile = {
+	"link_all.txt":"<a href=\"https://github.com/hnkz\" target=\"_blank\">hnkz's git link</a><br><a href=\"https://twitter.com/hnkz_hnkz\" target=\"_blank\">my Twitter account link</a>"
+};
+
 var command = "";
 
-// home時のlsコマンドを初期化
-var lsHome = ["<span class=\"nav\">home</span>", "<span class=\"nav\">work</span>", "<span class=\"nav\">git</span>","<span class=\"nav\">link</span>"];
+var lsRoot = ["home", "work", "git","link"];
 
-// navのリストを初期化
 var navList = ["home", "work", "git", "link"];
 
 
-// 表示するメッセージの初期化
 var msg = "<h1>Welcome to hnkznosite.mydns.jp<h1><p>Please \"help\" command if you have anything you do not understand.</p>"+ name + time + " <span class=\"dir\">/" + dir +  "</span> $ ";
 
-// tag感知フラグ
 var tagFlag = false;
 
-// 文字数カウンタ
 var count = 0;
 
-// 最初の表示
 function disp(){
 	var type = msg.substring(0, count);
   var lastType = type.slice(-1);
@@ -62,10 +68,8 @@ function disp(){
 	}
 }
 
-// ユーザがキーを入力したとき
 document.onkeydown = function(e) {
 
-	// 時間の取得
 	dd = new Date();
 	hours = dd.getHours();
 	minutes = dd.getMinutes();
@@ -77,7 +81,7 @@ document.onkeydown = function(e) {
 		if (command == "") {
 			document.getElementById("all").innerHTML = msg;
 		} else {
-			if (command.match(/cd [a-z.0-9]*/) || command == "cd") {
+			if (command.match(/cd ?[a-z.0-9]*/)) {
 				cd();
 			} else if ( command == "ls") {
 				ls();
@@ -87,6 +91,9 @@ document.onkeydown = function(e) {
 				pwd();
 			} else if ( command == "help") {
 				help();
+			} else if ( command.match(/cat ?[a-z.0-9]*/)){
+				var file = command.replace(/cat ?/,"");
+				cat(file);
 			}
 			 else {
 				msg = msg + command + "<br>" + "-hnkz: " + command + ": command not found" + "<br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
@@ -111,12 +118,10 @@ document.onkeydown = function(e) {
 	}
   else{
 		command = command + String.fromCharCode(event.keyCode).toLowerCase();
-		// command = command + event.keyCode;
 		document.getElementById("all").innerHTML = msg + command;
 	}
 };
 
-// cd command
 function cd(){
 	var flag = false;
 
@@ -128,7 +133,7 @@ function cd(){
 				flag = true;
 			}
 		}
-		if (command == "cd" || command == "cd ") {
+		if (command == "cd " || command == "cd") {
 			flag = true;
 		} else if (command == "cd ..") {
 			flag = true;
@@ -143,39 +148,106 @@ function cd(){
 		if (command == "cd ..") {
 			dir = "";
 			msg = msg + command + "<br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
-		} else {
+		} else if (command == "cd " || command == "cd") {
+			dir = "";
+			msg = msg + command + "<br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+ 		} else {
 			msg = msg + command + "<br><span class=\"discription\">-hnkz: cd: No such file or directory</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 		}
 	}
 }
 
-// ls command
-function ls(){
-	if(dir == ""){
-		var lsList = lsHome[0] + " " + lsHome[1] + " " + lsHome[2] + " " + lsHome[3];
+function ls() {
+	var lsList = "";
+
+	if (dir == "") {
+		lsList = "<span class=\"nav\">" + lsRoot[0] + " " + lsRoot[1] + " " + lsRoot[2] + " " + lsRoot[3] + "</span>";
 		msg = msg + command + "<br>" + lsList + "<br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+	} else if (dir == "home") {
+		lsList = "<span class=\"nav\">";
+		for (key in homeFile) {
+			lsList += key + " ";
+		}
+		lsList += "</span>";
+		msg = msg + command + "<br>" + lsList + "<br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+
+	} else if (dir == "work") {
+		lsList = "<span class=\"nav\">";
+		for (key in workFile) {
+			lsList += key + " ";
+		}
+		lsList += "</span>";
+		msg = msg + command + "<br>" + lsList + "<br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+
+	} else if (dir == "git") {
+		lsList = "<span class=\"nav\">";
+		for (key in gitFile) {
+			lsList += key + " ";
+		}
+		lsList += "</span>";
+		msg = msg + command + "<br>" + lsList + "<br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+
+	} else if (dir == "link") {
+		lsList = "<span class=\"nav\">";
+		for (key in linkFile) {
+			lsList += key + " ";
+		}
+		lsList += "</span>";
+		msg = msg + command + "<br>" + lsList + "<br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+
 	} else {
 		msg = msg + command + "<br><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 	}
 }
 
-// clear command
-function clear(){
+function clear() {
 	msg = "<h1>Welcome to hnkznosite.mydns.jp<h1><p>Please \"help\" command if you have anything you do not understand.</p>"+ name + time + " <span class=\"dir\">/" + dir +  "</span> $ ";
 }
 
-// pwd command
-function pwd(){
+function pwd() {
 	msg = msg + command + "<br>" + "<span class=\"dir\">/" + dir + "</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 }
 
-// help command
-function help(){
-	var help = "<br><span class=\"discription\">";
-	for(key in commandList){
+function help() {
+	var help = "<span class=\"discription\">";
+	for (key in commandList) {
 		help += key + ":<br>&nbsp;&nbsp;&nbsp;&nbsp;" + commandList[key] + "<br>";
 	}
 	help += "</span>";
 
 	msg = msg + command + "<br>" + help + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+}
+
+function cat(file) {
+	if (file == "") {
+		msg = msg + command + "<br><span class=\"discription\">-hnkz: cat: No such file or directory</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+	} else {
+		if (dir == "home") {
+			for (key in homeFile) {
+				if (file == key) {
+					msg = msg + command + "<br><span class=\"discription\">" + homeFile[key] + "</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+				}
+			}
+		} else if (dir == "work") {
+			for (key in workFile) {
+				if (file == key) {
+					msg = msg + command + "<br><span class=\"discription\">" + workFile[key] + "</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+				}
+			}
+		} else if (dir == "git") {
+			for (key in gitFile) {
+				if (file == key) {
+					msg = msg + command + "<br><span class=\"discription\">" + gitFile[key] + "</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+				}
+			}
+		} else if (dir == "link") {
+			for (key in linkFile) {
+				if (file == key) {
+					msg = msg + command + "<br><span class=\"discription\">" + linkFile[key] + "</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+				}
+			}
+		} else {
+
+		}
+	}
 }
