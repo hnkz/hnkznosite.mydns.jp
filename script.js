@@ -8,17 +8,19 @@ var dir = "";
 
 var name = "hanakazu ";
 
-var commandList = {	"ls":"List information about the FILEs (the current directory by default)",
-									 	"cd":"usage: cd [dir] Change directory",
-									 	"clear":"Clear the terminal",
-										"pwd":"Show the current directory",
-										"file":"usage: file [file] Show the file information",
-										"help":"Show command usage",
-										"cat":"usage: cat [file] Show file contents "
+var commandList = {
+	"ls"			:"List information about the FILEs (the current directory by default)",
+ 	"cd"			:"usage: cd [dir] Change directory",
+ 	"clear"		:"Clear the terminal",
+	"pwd"			:"Show the current directory",
+	"file"		:"usage: file [file] Show the file information",
+	"help"		:"Show command usage",
+	"cat"			:"usage: cat [file] Show file contents "
 };
 
 var homeFile = {
-	"self_introduction.txt":"Hi, Im Kazuki Hanai. Im 18 years old.<br> Im attending Shizuoka University.<br><br> Like: Computer, Science, Math, Outdoor-sports etc...<br>My Dream: I want to be Hacker or Researcher <br><br> KazukiHanai"
+	"introduction.txt":"Hi, Im Kazuki Hanai. Im 18 years old.<br> Im attending Shizuoka University.<br><br> Like: Computer, Science, Math, Outdoor-sports etc...<br>My Dream: I want to be a hacker or a researcher in the future. <br><br> KazukiHanai",
+	"test_.txt":"testtest",
 };
 
 var workFile = {
@@ -45,6 +47,10 @@ var msg = "<h1>Welcome to hnkznosite.mydns.jp<h1><p>Please \"help\" command if y
 var tagFlag = false;
 
 var count = 0;
+
+var keyFlag = {
+	"shift":false,
+};
 
 function disp(){
 	var type = msg.substring(0, count);
@@ -91,7 +97,7 @@ document.onkeydown = function(e) {
 				pwd();
 			} else if ( command == "help") {
 				help();
-			} else if ( command.match(/cat ?[a-z.0-9]*/)){
+			} else if ( command.match(/cat ?[a-z.0-9_]*/)){
 				var file = command.replace(/cat ?/,"");
 				cat(file);
 			}
@@ -105,6 +111,8 @@ document.onkeydown = function(e) {
 	} else if (event.keyCode == 8) {
 		command = command.substr( 0, command.length-1 );
 		document.getElementById("all").innerHTML = msg + command;
+	} else if ( event.keyCode == 16) {
+		keyFlag["shift"] = true;
 	} else if (event.keyCode == 189) {
 		command = command + "_";
 		document.getElementById("all").innerHTML = msg + command;
@@ -112,13 +120,23 @@ document.onkeydown = function(e) {
 		command = command + ".";
 		document.getElementById("all").innerHTML = msg + command;
 	}
-	else if (event.keyCode == 191) {
+	 else if (event.keyCode == 191) {
 		command = command + "/";
 		document.getElementById("all").innerHTML = msg + command;
+	} else {
+		if(keyFlag["shift"]){
+			command = command + String.fromCharCode(event.keyCode);
+			document.getElementById("all").innerHTML = msg + command;
+		} else {
+			command = command + String.fromCharCode(event.keyCode).toLowerCase();
+			document.getElementById("all").innerHTML = msg + command;
+		}
 	}
-  else{
-		command = command + String.fromCharCode(event.keyCode).toLowerCase();
-		document.getElementById("all").innerHTML = msg + command;
+};
+
+document.onkeyup = function(e){
+	if (event.keyCode == 16) {
+		keyFlag["shift"] = false;
 	}
 };
 
@@ -226,28 +244,40 @@ function cat(file) {
 			for (key in homeFile) {
 				if (file == key) {
 					msg = msg + command + "<br><span class=\"discription\">" + homeFile[key] + "</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+					return;
 				}
 			}
+			msg = msg + command + "<br><span class=\"discription\">-hnkz: cat: No such file or directory</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+
 		} else if (dir == "work") {
 			for (key in workFile) {
 				if (file == key) {
 					msg = msg + command + "<br><span class=\"discription\">" + workFile[key] + "</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+					return;
 				}
 			}
+			msg = msg + command + "<br><span class=\"discription\">-hnkz: cat: No such file or directory</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+
 		} else if (dir == "git") {
 			for (key in gitFile) {
 				if (file == key) {
 					msg = msg + command + "<br><span class=\"discription\">" + gitFile[key] + "</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+					return;
 				}
 			}
+			msg = msg + command + "<br><span class=\"discription\">-hnkz: cat: No such file or directory</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+
 		} else if (dir == "link") {
 			for (key in linkFile) {
 				if (file == key) {
 					msg = msg + command + "<br><span class=\"discription\">" + linkFile[key] + "</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
+					return;
 				}
 			}
-		} else {
+			msg = msg + command + "<br><span class=\"discription\">-hnkz: cat: No such file or directory</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 
+		} else {
+			msg = msg + command + "<br><span class=\"discription\">-hnkz: cat: No such file or directory</span><br>" + name + time + " <span class=\"dir\">/" + dir + "</span> $ ";
 		}
 	}
 }
