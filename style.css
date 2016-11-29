@@ -2,12 +2,22 @@
   font-family: monaco, Consolas, "Lucida Console", monospace;;
   margin: 0;
   padding: 0;
+  font-size:0.9em;
 }
 
 body{
   background-color: #222;
+}
+
+#all{
   color: #2d2;
-  font-size:0.7em;
+
+}
+
+#another{
+  width: 500px;
+  height: 400px;
+  float: right;
 }
 
 a{
@@ -15,7 +25,6 @@ a{
 }
 
 h1,h2,p{
-  font-size: 0.7em;
   margin: 1px;
 }
 

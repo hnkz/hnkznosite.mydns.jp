@@ -1,3 +1,6 @@
+
+
+
 dd = new Date();
 hours = dd.getHours();
 minutes = dd.getMinutes();
@@ -17,7 +20,7 @@ var commandList = {
 };
 
 var homeFile = {
-	"introduction.txt":"Hi, Im Kazuki Hanai. Im 18 years old.<br> Im attending Shizuoka University.<br><br> Like: Computer, Science, Math, Outdoor-sports etc...<br>My Dream: I want to be a hacker or a researcher in the future. <br><br> KazukiHanai",
+	"introduction.txt":"Hi, Im Kazuki Hanai. Im 18 years old.<br> Im attending Shizuoka University.<br><br> Like: Computer, Science, Math, Outdoor-sports etc...<br>My Dream: I want to be a hacker or a researcher in the future. <br><br> 英語できないKazukiHanai",
 	"test_.txt":"testtest",
 };
 
@@ -79,9 +82,20 @@ document.onkeydown = function(e) {
 	minutes = dd.getMinutes();
 	seconds = dd.getSeconds();
 
+	var kcode;
+
+	if (document.all)
+  {
+    kcode = e.keyCode;
+  }
+  else
+  {
+    kcode = e.which;
+  }
+
 	time = hours + ":" + minutes + ":" + seconds;
 
-	if (event.keyCode == 13) {
+	if (kcode == 13) {
 		if (command == "") {
 			document.getElementById("all").innerHTML = msg;
 		} else {
@@ -106,34 +120,46 @@ document.onkeydown = function(e) {
 			command = "";
 			document.getElementById("all").innerHTML = msg;
 		}
-	} else if (event.keyCode == 8) {
+	} else if (kcode == 8) {
 		command = command.substr( 0, command.length-1 );
 		document.getElementById("all").innerHTML = msg + command;
-	} else if ( event.keyCode == 16) {
+		return false;
+	} else if ( kcode == 16) {
 		keyFlag["shift"] = true;
-	} else if (event.keyCode == 189) {
+	} else if (kcode == 189) {
 		command = command + "_";
 		document.getElementById("all").innerHTML = msg + command;
-	} else if (event.keyCode == 190) {
+	} else if (kcode == 190) {
 		command = command + ".";
 		document.getElementById("all").innerHTML = msg + command;
 	}
-	 else if (event.keyCode == 191) {
+	 else if (kcode == 191) {
 		command = command + "/";
 		document.getElementById("all").innerHTML = msg + command;
 	} else {
 		if(keyFlag["shift"]){
-			command = command + String.fromCharCode(event.keyCode);
+			command = command + String.fromCharCode(kcode);
 			document.getElementById("all").innerHTML = msg + command;
 		} else {
-			command = command + String.fromCharCode(event.keyCode).toLowerCase();
+			command = command + String.fromCharCode(kcode).toLowerCase();
 			document.getElementById("all").innerHTML = msg + command;
 		}
 	}
 };
 
 document.onkeyup = function(e){
-	if (event.keyCode == 16) {
+	var kcode;
+
+	if (document.all)
+	{
+		kcode = e.keyCode;
+	}
+	else
+	{
+		kcode = e.which;
+	}
+
+	if (kcode == 16) {
 		keyFlag["shift"] = false;
 	}
 };
